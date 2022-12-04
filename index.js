@@ -1,5 +1,8 @@
 const black = [0, 0, 0]
 const red = [255, 0, 0]
+const pink = [230, 0, 126]
+const green = [73, 254, 0]
+const yellow = [255, 255, 0]
 
 const size = 10
 
@@ -19,6 +22,7 @@ const numbers = [
 const now = new Date()
 const hours = now.getHours()
 const minutes = now.getMinutes()
+const seconds = now.getSeconds()
 
 const timeWidth = 17 - 1 // -1 to make it loop faster
 const xOffset =
@@ -93,9 +97,9 @@ const paintColon = (x, y) => {
 	paintPixel(red, x, y + 3)
 }
 
-paintDoubleDigit(hours, xOffset, yOffset)
-paintColon(xOffset + 8, yOffset)
-paintDoubleDigit(minutes, xOffset + 10, yOffset)
+// paintDoubleDigit(hours, xOffset, yOffset)
+// paintColon(xOffset + 8, yOffset)
+// paintDoubleDigit(minutes, xOffset + 10, yOffset)
 
 const mirror = (items) => {
 	const newItems = items.map(
@@ -122,6 +126,24 @@ const rotateCounterClockwise = (items) => {
 	return newItems
 }
 
+for (let i = 0; i < Math.floor(seconds / 3); i++) {
+	const y = size - 1 - (i % size)
+	const x = Math.floor(i / size)
+	paintPixel(red, x, y)
+}
+
+for (let i = 0; i < Math.floor(minutes / 3); i++) {
+	const y = size - 1 - (i % size)
+	const x = 3 + Math.floor(i / size)
+	paintPixel(green, x, y)
+}
+
+for (let i = 0; i < hours; i++) {
+	const y = size - 1 - (i % size)
+	const x = 6 + Math.floor(i / size)
+	paintPixel(pink, x, y)
+}
+
 const payload = JSON.stringify({
 	seg: {
 		i: rotateCounterClockwise(flip(rgbColors)),
@@ -138,7 +160,7 @@ fetch('http://192.168.0.53/json', {
 }).then(() => {
 	setTimeout(() => {
 		location.reload()
-	}, 1000)
+	}, 500)
 })
 
 // return {

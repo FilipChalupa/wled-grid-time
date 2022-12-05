@@ -2,12 +2,16 @@ const black = [0, 0, 0]
 const red = [255, 0, 0]
 const pink = [230, 0, 126]
 const green = [73, 254, 0]
-const yellow = [255, 255, 0]
+const yellow = [255, 255, 64]
 const cyan = [0, 255, 255]
+const orange = [255, 127, 0]
 
 const size = 10
 
 const now = new Date()
+const years = now.getFullYear()
+const months = now.getMonth() + 1
+const days = now.getDate()
 const hours = now.getHours()
 const minutes = now.getMinutes()
 const seconds = now.getSeconds()
@@ -62,9 +66,40 @@ const paintDoubleDigitColumn = (xStart, number, color) => {
 	paintColumn(xStart + 1, secondDigit, changeIntensity(color, 0.5))
 }
 
-paintDoubleDigitColumn(1, hours, pink)
-paintDoubleDigitColumn(4, minutes, green)
-paintDoubleDigitColumn(7, seconds, red)
+paintDoubleDigitColumn(0, months, yellow)
+paintDoubleDigitColumn(2, days, cyan)
+paintDoubleDigitColumn(4, hours, pink)
+paintDoubleDigitColumn(6, minutes, green)
+paintDoubleDigitColumn(8, seconds, red)
+
+// const paintYears = () => {
+// const y = size - 1
+// const color = changeIntensity(orange, 0.5)
+// Variant A
+// paintPixel(color, 2, size - 2)
+// paintPixel(color, 2, size - 1)
+// paintPixel(color, 6, size - 2)
+// paintPixel(color, 6, size - 1)
+// if (years > 2023) {
+// 	paintPixel(color, 8, size - 4)
+// }
+// if (years > 2022) {
+// 	paintPixel(color, 8, size - 3)
+// }
+// paintPixel(color, 8, size - 2)
+// paintPixel(color, 8, size - 1)
+
+// Variant B
+// paintPixel(color, 0, y)
+// paintPixel(color, 1, y)
+// paintPixel(color, 4, y)
+// paintPixel(color, 5, y)
+// paintPixel(color, 7, y)
+// paintPixel(color, 8, y)
+// if (years === 2023) {
+// 	paintPixel(color, 9, y)
+// }
+// }
 
 const payload = JSON.stringify({
 	seg: {

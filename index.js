@@ -127,20 +127,25 @@ const rotateCounterClockwise = (items) => {
 }
 
 for (let i = 0; i < Math.floor(seconds / 3); i++) {
-	const y = size - 1 - (i % size)
-	const x = Math.floor(i / size)
+	const y = i % size
+	const x = 6 + Math.floor(i / size)
 	paintPixel(red, x, y)
+}
+for (let i = 0; i < (minutes % 3) + 1; i++) {
+	const x = 9
+	const y = i
+	paintPixel(yellow, x, y)
 }
 
 for (let i = 0; i < Math.floor(minutes / 3); i++) {
-	const y = size - 1 - (i % size)
+	const y = i % size
 	const x = 3 + Math.floor(i / size)
 	paintPixel(green, x, y)
 }
 
 for (let i = 0; i < hours; i++) {
-	const y = size - 1 - (i % size)
-	const x = 6 + Math.floor(i / size)
+	const y = i % size
+	const x = 0 + Math.floor(i / size)
 	paintPixel(pink, x, y)
 }
 
@@ -152,17 +157,9 @@ const payload = JSON.stringify({
 
 fetch('http://192.168.0.53/json', {
 	method: 'POST',
-	body: JSON.stringify({
-		seg: {
-			i: rotateCounterClockwise(flip(rgbColors)),
-		},
-	}),
+	body: payload,
 }).then(() => {
 	setTimeout(() => {
 		location.reload()
 	}, 500)
 })
-
-// return {
-// 	payload,
-// }

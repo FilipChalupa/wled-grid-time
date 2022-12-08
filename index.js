@@ -1,11 +1,36 @@
-const run = async () => {
-	const black = [0, 0, 0]
-	const red = [255, 0, 0]
-	const pink = [230, 0, 126]
-	const green = [73, 254, 0]
-	const yellow = [255, 255, 64]
-	const cyan = [0, 255, 255]
-	const orange = [255, 127, 0]
+const run = async (isDarkMode) => {
+	const colors = {
+		blank: {
+			primary: { light: [0, 0, 0], dark: [0, 0, 0] },
+			secondary: { light: [0, 0, 0], dark: [0, 0, 0] },
+		},
+		red: {
+			primary: { light: [255, 0, 0], dark: [43, 12, 12] },
+			secondary: { light: [180, 0, 0], dark: [28, 0, 0] },
+		},
+		pink: {
+			primary: { light: [230, 0, 126], dark: [46, 0, 25] },
+			secondary: { light: [180, 0, 98], dark: [40, 0, 22] },
+		},
+		green: {
+			primary: { light: [73, 254, 0], dark: [11, 43, 0] },
+			secondary: { light: [55, 190, 0], dark: [0, 28, 0] },
+		},
+		yellow: {
+			primary: { light: [255, 255, 64], dark: [51, 51, 13] },
+			secondary: { light: [224, 224, 64], dark: [42, 42, 11] },
+		},
+		cyan: {
+			primary: { light: [0, 255, 255], dark: [0, 56, 56] },
+			secondary: { light: [0, 200, 200], dark: [0, 41, 41] },
+		},
+	}
+
+	const extractColor = (colorName, isPrimary = true) => {
+		return colors[colorName][isPrimary ? 'primary' : 'secondary'][
+			isDarkMode ? 'dark' : 'light'
+		]
+	}
 
 	const size = 10
 
@@ -17,11 +42,7 @@ const run = async () => {
 	const minutes = now.getMinutes()
 	const seconds = now.getSeconds()
 
-	const rgbColors = new Array(size * size).fill(black)
-
-	const changeIntensity = (color, factor) => {
-		return color.map((c) => Math.floor(c * factor))
-	}
+	const rgbColors = new Array(size * size).fill(extractColor('blank'))
 
 	const paintPixel = (color, x, y) => {
 		if (x >= 0 && y >= 0 && x < size && y < size) {
@@ -60,18 +81,18 @@ const run = async () => {
 			paintPixel(color, x, i)
 		}
 	}
-	const paintDoubleDigitColumn = (xStart, number, color) => {
+	const paintDoubleDigitColumn = (xStart, number, colorName) => {
 		const firstDigit = Math.floor(number / 10)
 		const secondDigit = number % 10
-		paintColumn(xStart, firstDigit, color)
-		paintColumn(xStart + 1, secondDigit, changeIntensity(color, 0.5))
+		paintColumn(xStart, firstDigit, extractColor(colorName))
+		paintColumn(xStart + 1, secondDigit, extractColor(colorName, false))
 	}
 
-	paintDoubleDigitColumn(0, months, yellow)
-	paintDoubleDigitColumn(2, days, cyan)
-	paintDoubleDigitColumn(4, hours, pink)
-	paintDoubleDigitColumn(6, minutes, green)
-	paintDoubleDigitColumn(8, seconds, red)
+	paintDoubleDigitColumn(0, months, 'yellow')
+	paintDoubleDigitColumn(2, days, 'cyan')
+	paintDoubleDigitColumn(4, hours, 'pink')
+	paintDoubleDigitColumn(6, minutes, 'green')
+	paintDoubleDigitColumn(8, seconds, 'red')
 
 	// const paintYears = () => {
 	// const y = size - 1
@@ -144,7 +165,7 @@ const run = async () => {
 }
 
 const loop = async () => {
-	await run()
+	await run(matchMedia('(prefers-color-scheme: dark)').matches)
 	setTimeout(() => {
 		loop()
 	}, 1000)

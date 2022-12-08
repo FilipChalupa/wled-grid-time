@@ -1,4 +1,4 @@
-const run = () => {
+const run = async () => {
 	const black = [0, 0, 0]
 	const red = [255, 0, 0]
 	const pink = [230, 0, 126]
@@ -104,18 +104,14 @@ const run = () => {
 
 	const payload = JSON.stringify({
 		seg: {
-			i: rotateCounterClockwise(flip(rgbColors)),
+			i: flip(rgbColors),
 		},
 	})
 
-	// fetch('http://192.168.0.53/json', {
-	// 	method: 'POST',
-	// 	body: payload,
-	// }).then(() => {
-	// 	setTimeout(() => {
-	// 		location.reload()
-	// 	}, 500)
-	// })
+	await fetch('http://192.168.0.53/json', {
+		method: 'POST',
+		body: payload,
+	})
 
 	const visualise = (payload) => {
 		const seg = JSON.parse(payload).seg
@@ -141,14 +137,14 @@ const run = () => {
 
 	const untransformedPayload = JSON.stringify({
 		seg: {
-			i: rotateCounterClockwise(flip(JSON.parse(payload).seg.i)),
+			i: flip(JSON.parse(payload).seg.i),
 		},
 	})
 	visualise(untransformedPayload)
 }
 
-const loop = () => {
-	run()
+const loop = async () => {
+	await run()
 	setTimeout(() => {
 		loop()
 	}, 1000)

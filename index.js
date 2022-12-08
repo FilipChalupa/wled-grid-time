@@ -129,10 +129,12 @@ const run = async (isDarkMode) => {
 		},
 	})
 
-	await fetch('http://192.168.0.53/json', {
-		method: 'POST',
-		body: payload,
-	})
+	if (location.hostname === 'localhost') {
+		await fetch('http://192.168.0.53/json', {
+			method: 'POST',
+			body: payload,
+		})
+	}
 
 	const visualise = (payload) => {
 		const seg = JSON.parse(payload).seg
